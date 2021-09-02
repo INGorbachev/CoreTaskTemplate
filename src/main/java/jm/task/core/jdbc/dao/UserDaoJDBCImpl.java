@@ -1,8 +1,6 @@
 package jm.task.core.jdbc.dao;
-
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +17,13 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
 
         String sqlCreate = "CREATE TABLE IF NOT EXISTS Users " +
-                "(ID BIGINT NOT NULL AUTO_INCREMENT, " +
-                " NAME VARCHAR(45), " +
-                " LASTNAME VARCHAR(45), " +
-                " AGE BIGINT, " +
-                " PRIMARY KEY ( ID ))";
+                "(ID BIGINT           NOT NULL AUTO_INCREMENT, " +
+                " NAME                VARCHAR(45), " +
+                " LASTNAME            VARCHAR(45), " +
+                " AGE                 BIGINT, " +
+                " PRIMARY KEY         ( ID ))";
         try (Statement statement = connection.createStatement()) {
-
             statement.executeUpdate(sqlCreate);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,11 +31,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        String sqlDrop = "DROP TABLE Users";
+        String sqlDrop = "DROP TABLE IF EXISTS users";
         try (Statement statement = connection.createStatement()) {
-
             statement.executeUpdate(sqlDrop);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -49,14 +43,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         String sqlSave = "INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlSave)) {
-
-
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -66,13 +56,12 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         String sqlRemove = "DELETE FROM users WHERE ID = (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRemove)) {
-
             preparedStatement.executeUpdate(sqlRemove);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public List<User> getAllUsers() {
         String sqlGetAll = "SELECT * FROM  users";
@@ -93,13 +82,12 @@ public class UserDaoJDBCImpl implements UserDao {
         }
         return userList;
     }
+
     @Override
     public void cleanUsersTable() {
-        String sqlClean = "DELETE FROM users";
+        String sqlClean = "TRUNCATE TABLE users";
         try (Statement statement = connection.createStatement()) {
-
             statement.executeUpdate(sqlClean);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
