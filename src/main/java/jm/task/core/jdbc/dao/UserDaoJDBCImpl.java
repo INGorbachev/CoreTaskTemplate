@@ -24,6 +24,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 " PRIMARY KEY         ( ID ))";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlCreate);
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,6 +35,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String sqlDrop = "DROP TABLE IF EXISTS users";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlDrop);
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -47,6 +49,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,6 +60,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String sqlRemove = "DELETE FROM users WHERE ID = (?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sqlRemove)) {
             preparedStatement.executeUpdate(sqlRemove);
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,7 +79,9 @@ public class UserDaoJDBCImpl implements UserDao {
                 userInTable.setLastName(resultSet.getString(3));
                 userInTable.setAge(resultSet.getByte(4));
                 userList.add(userInTable);
-            } resultSet.close();
+            }
+            connection.close();
+            resultSet.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -88,6 +94,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String sqlClean = "TRUNCATE TABLE users";
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sqlClean);
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
